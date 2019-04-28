@@ -8,7 +8,15 @@ pipeline {
     options {
             skipStagesAfterUnstable()
     }
+    parameters {
+        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH'
+     }
     stages {
+        stage('choosingBranch') {
+            steps {
+                git branch: "${params.BRANCH}", url: 'https://github.com/xala3pa/simple-java-maven-app.git'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
